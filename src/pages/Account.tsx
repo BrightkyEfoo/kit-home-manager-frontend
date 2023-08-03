@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Toaster } from 'react-hot-toast';
+import { Toaster, toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { apiURL } from '../backendRoutes';
 import {
@@ -13,6 +13,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  TextField,
   Toolbar,
   Tooltip,
   Typography,
@@ -100,28 +101,13 @@ const Account = () => {
     };
   };
 
+
+
+const [Number, setNumber] = useState('')
+
   return (
     <div>
       <Toaster />
-      {/* <Drawer
-        anchor={'left'}
-        open={DrawerState.toggled}
-        onClose={toggleDrawer(false)}
-      >
-        <Box
-          sx={{
-            display: { xs: 'block', md: 'none', padding: 15 },
-          }}
-        >
-          {pages.map(page => (
-            <Box key={page} marginBottom={2} paddingRight={5} paddingLeft={3}>
-              <Typography textAlign="center" color={'blue'}>
-                {page}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-      </Drawer> */}
       <AppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
@@ -244,21 +230,70 @@ const Account = () => {
           gridTemplateColumns={'repeat(2,1fr)'}
         >
           <Box margin={2}>
-            <Typography bgcolor={'black'} color='white' textAlign={'center'} fontWeight={'bold'}>Nom</Typography>
-            <Typography textAlign={'center'} fontSize={14}>{'gilres'}</Typography>
+            <Typography
+              bgcolor={'black'}
+              color="white"
+              textAlign={'center'}
+              fontWeight={'bold'}
+            >
+              Nom
+            </Typography>
+            <Typography textAlign={'center'} fontSize={14}>
+              {'gilres'}
+            </Typography>
           </Box>
           <Box margin={2}>
-            <Typography bgcolor={'black'} color='white' textAlign={'center'} fontWeight={'bold'} >Email</Typography>
-            <Typography textAlign={'center'} fontSize={14}>{'test@test.com'}</Typography>
+            <Typography
+              bgcolor={'black'}
+              color="white"
+              textAlign={'center'}
+              fontWeight={'bold'}
+            >
+              Email
+            </Typography>
+            <Typography textAlign={'center'} fontSize={14}>
+              {'test@test.com'}
+            </Typography>
           </Box>
-          <Box margin={2} gridColumn={'1/3'} >
-            <Typography bgcolor={'black'} color='white' textAlign={'center'} fontWeight={'bold'}>Number</Typography>
-            <Typography textAlign={'center'} fontSize={14}>{'+237685911324'}</Typography>
+          <Box margin={2} gridColumn={'1/3'}>
+            <Typography
+              bgcolor={'black'}
+              color="white"
+              textAlign={'center'}
+              fontWeight={'bold'}
+            >
+              Number
+            </Typography>
+            {/* <Typography textAlign={'center'} fontSize={14}>{'+237685911324'}</Typography> */}
+            <TextField
+              type="tel"
+              id="number"
+              onChange={(e) => {
+                setNumber(e.target.value)
+              }}
+              value={Number}
+              name="number"
+              label="phone"
+              variant="outlined"
+            />
+            <Button variant='contained' onClick={()=>{
+              axios.post(apiURL+'/user/changeNumber' , {
+                userId:user.id,
+                number : Number
+              },{
+                headers:{
+                  Authorization : token
+                }
+              }).then(res => {
+                toast.success("Numero change avec succes , cela prendra 5min pour etre effectif")
+              }).catch(err => {
+                toast.error(err.response?.data?.err)
+                console.log('err', err)
+              })
+            }}>Valider</Button>
           </Box>
         </Box>
-        <Box>
-          {/* <TextField type='password' var /> */}
-        </Box>
+        <Box>{/* <TextField type='password' var /> */}</Box>
       </Box>
     </div>
   );
