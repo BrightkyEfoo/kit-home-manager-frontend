@@ -154,7 +154,7 @@ const Home = () => {
             toast.error(err.response?.data?.msg)
             console.log('err', err)
         })
-    },1000)
+    },2000)
   
     return () => {
       clearInterval(interval)
